@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Mario World - Animação CSS</title>
+    
+    <!-- Biblioteca Animate.css para animações prontas -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- Fontes do Google (Pixel Art e Poppins) -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #5c94fc 0%, #2980b9 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.1rem;
+            color: #e74c3c;
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 0px #000;
+            line-height: 1.5;
+        }
+
+        /* Cenário do jogo */
+        .stage {
+            position: relative;
+            background: linear-gradient(to bottom, #6b8cff 70%, #00b894 70%);
+            border: 4px solid #000;
+            border-radius: 12px;
+            height: 240px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 15px;
+        }
+
+        .mario-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+        }
+
+        /* Bloco de Interrogação */
+        .question-block {
+            width: 45px;
+            height: 45px;
+            background-color: #f1c40f;
+            border: 3px solid #000;
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.2rem;
+            color: #000;
+            box-shadow: inset -3px -3px 0px #d35400;
+            position: relative;
+        }
+
+        /* Estrela que sai de dentro da caixa (inicialmente oculta) */
+        .star {
+            position: absolute;
+            top: 0px;
+            font-size: 1.5rem;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.4s ease;
+        }
+
+        /* Classe que faz a estrela subir e aparecer */
+        .star.show {
+            opacity: 1;
+            transform: translateY(-55px) scale(1.2) rotate(360deg);
+        }
+
+        /* O boneco do Mario feito em SVG garantido 100% visível */
+        .mario-svg {
+            width: 55px;
+            height: 55px;
+        }
+
+        .status-text {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-mario {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8rem;
+            background: #e74c3c;
+            color: #fff;
+            border: 3px solid #000;
+            padding: 15px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #95a5a6;
+            transition: all 0.1s ease;
+            width: 100%;
+        }
+
+        .btn-mario:hover {
+            background: #c0392b;
+        }
+
+        .btn-mario:active {
+            box-shadow: 0 2px 0 #95a5a6;
+            transform: translateY(3px);
+        }
+
+        .btn-mario:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h1 id="titulo">MARIO WORLD - ANIMAÇÃO</h1>
+
+        <div class="stage">
+            <div class="mario-container">
+                <!-- Bloco de interrogação contendo a estrela -->
+                <div id="bloco" class="question-block">
+                    ?
+                    <div id="estrela" class="star">⭐</div>
+                </div>
+                
+                <!-- Boneco do Mario em SVG embutido (Nunca quebra) -->
+                <div id="mario" class="mario-svg">
+                    <svg viewBox="0 0 24 24" width="100%" height="100%">
+                        <!-- Chapéu Vermelho -->
+                        <path d="M6 7h10v3H6z" fill="#e74c3c"/>
+                        <path d="M4 9h14v2H4z" fill="#e74c3c"/>
+                        <!-- Rosto / Pele -->
+                        <path d="M7 11h9v5H7z" fill="#f5cd79"/>
+                        <!-- Bigode e Olhos -->
+                        <path d="M9 12h2v1H9zM13 12h2v1H13z" fill="#000"/>
+                        <path d="M8 14h8v2H8z" fill="#333"/>
+                        <!-- Macacão / Camisa Vermelha -->
+                        <path d="M5 16h14v4H5z" fill="#e74c3c"/>
+                        <path d="M7 17h10v3H7z" fill="#0066cc"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <p id="texto" class="status-text">Clique no botão abaixo para iniciar a fase!</p>
+
+        <button id="btnIniciar" class="btn-mario" onclick="iniciar()">START!</button>
+    </div>
+
+    <script>
+        function iniciar() {
+            const btn = document.getElementById("btnIniciar");
+            const texto = document.getElementById("texto");
+            const mario = document.getElementById("mario");
+            const bloco = document.getElementById("bloco");
+            const estrela = document.getElementById("estrela");
+
+            // Desativa o botão para evitar cliques múltiplos
+            btn.disabled = true;
+            
+            // Reseta estados anteriores da animação
+            mario.className = "mario-svg";
+            bloco.className = "question-block";
+            estrela.classList.remove("show");
+            bloco.innerHTML = "? <div id='estrela' class='star'>⭐</div>";
+
+            let tempo = 3;
+            texto.innerHTML = `Preparar... ${tempo}s`;
+
+            // Contagem regressiva de 3 segundos
+            const contador = setInterval(() => {
+                tempo--;
+                if (tempo > 0) {
+                    texto.innerHTML = `Preparar... ${tempo}s`;
+                } else {
+                    clearInterval(contador);
+                    executarAnimacao();
+                }
+            }, 1000);
+
+            function executarAnimacao() {
+                texto.innerHTML = "Mario saltou!";
+
+                // Mario pula usando a classe do Animate.css
+                mario.classList.add("animate__animated", "animate__bounceInUp");
+
+                // Quando o Mario bate no bloco (após 0.6 segundos)
+                setTimeout(() => {
+                    bloco.classList.add("animate__animated", "animate__rubberBand");
+                    bloco.style.backgroundColor = "#7f8c8d"; // Bloco fica cinza (vazio)
+                    
+                    // Mostra e faz a estrela subir para fora da caixa
+                    const estrelaAtual = document.getElementById("estrela");
+                    if(estrelaAtual) {
+                        estrelaAtual.classList.add("show");
+                    }
+
+                    texto.innerHTML = "⭐️ Power-up: Estrela Conquistada! ⭐️";
+                    
+                    // Reativa o botão depois que tudo termina
+                    btn.disabled = false;
+                }, 600);
+            }
+        }
+    </script>
+
+</body>
+
+</html>
